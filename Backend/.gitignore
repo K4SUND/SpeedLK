@@ -1,2 +1,1 @@
-demo/src/main/resources/serviceAccountKey.json
-demo/target/classes/serviceAccountKey.json
+/config/serviceAccountKey.json

@@ -28,7 +28,7 @@ public class LocationController {
         return new ResponseEntity<>(locationService.getLocationById(Id), HttpStatus.OK);
     }
 
-    @GetMapping("/locationId")
+    @GetMapping("/location-id")
     public ResponseEntity<Integer> getLocationId(@RequestParam String province, @RequestParam String district)
     {
         return new ResponseEntity<>(locationService.getLocationId(province,district),HttpStatus.OK);

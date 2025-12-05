@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 
+import com.example.demo.dto.UserDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -94,8 +95,10 @@ public class Item {
         this.imageUrl = imageUrl;
     }
 
-    public User getUser() {
-        return user;
+
+
+    public UserDTO getUser() {
+        return new UserDTO(user.getId(),user.getEmail(), user.getName(), user.getPhoneNumber());
     }
 
     public void setUser(User user) {

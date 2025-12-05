@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -28,8 +27,7 @@ public class User {
     }
 
     public User(int userId) {
-
-        id =userId ;
+        id = userId;
     }
 
     public int getId() {

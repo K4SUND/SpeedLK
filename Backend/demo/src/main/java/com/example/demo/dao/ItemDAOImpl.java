@@ -52,6 +52,7 @@ public class ItemDAOImpl implements ItemDAO {
         TypedQuery<Item> itemTypedQuery = entityManager.createQuery("from Item",Item.class);
         List<Item> itemList = itemTypedQuery.getResultList();
         return itemList;
+
     }
 
     @Override

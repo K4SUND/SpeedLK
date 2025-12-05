@@ -17,159 +17,168 @@ import java.util.List;
 @RestController
 public class ItemController {
 
-   private ItemService itemService;
+    private ItemService itemService;
 
-   private  FirebaseStorageService firebaseStorageService;
+    private FirebaseStorageService firebaseStorageService;
 
 
-   @Autowired
+    @Autowired
     public ItemController(ItemService itemService, FirebaseStorageService firebaseStorageService) {
         this.itemService = itemService;
         this.firebaseStorageService = firebaseStorageService;
     }
 
 
-
-//    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/item/{id}")
-    public ResponseEntity<Item>  getItemByID(@PathVariable int id)
-    {
-        return new ResponseEntity<>(itemService.getItemByID(id), HttpStatus.OK);
+    public ResponseEntity<Item> getItemByID(@PathVariable int id) {
+        Item item = itemService.getItemByID(id);
+        if (item == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
 
-//    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/items")
-    public ResponseEntity<List<Item>> getAllItems()
-    {
-        return new ResponseEntity<>(itemService.getAllItems(),HttpStatus.OK);
-    }
-    @GetMapping("/itemsByUserID/{id}")
-    public ResponseEntity<List<Item>> getItemsByUser(@PathVariable int id)
-    {
-        return new ResponseEntity<>(itemService.getItemsByUser(id),HttpStatus.OK);
-    }
-
-    @GetMapping("/itemsByLocationID/{id}")
-    public ResponseEntity<List<Item>> getItemsByLocation(@PathVariable int id)
-    {
-       List<Item> itemList =  itemService.getItemsByLocation(id);
-
-       if (itemList==null)
-       {
-           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-       }
-        return new ResponseEntity<>(itemList,HttpStatus.OK);
+    public ResponseEntity<List<Item>> getAllItems() {
+        List<Item> items = itemService.getAllItems();
+        if (items == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
-    @PostMapping("/item")
-    public ResponseEntity<String > addItem(@RequestParam("brand") String brand,
-                                           @RequestParam("model") String model,
-                                           @RequestParam("description") String description,
-                                           @RequestParam("price") double price,
-                                           @RequestParam("locationId") int locationId,
-                                           @RequestParam("userId") int userId,
-                                           @RequestParam("file") MultipartFile file)
-    {
-
-//        String filename = fileStorageService.storeFile(file);
-        String filename = firebaseStorageService.uploadImage(file);
-
-        Item item = new Item();
-        item.setBrand(brand);
-        item.setModel(model);
-        item.setDescription(description);
-        item.setPrice(price);
-        item.setImageUrl(filename);
-        item.setUser(new User(userId));
-        item.setLocation(new Location(locationId));
-
-        itemService.addItem(item);
-        return new ResponseEntity<>("Item Added",HttpStatus.CREATED);
-
-
-
+    @GetMapping("/items-by-user-id/{id}")
+    public ResponseEntity<List<Item>> getItemsByUser(@PathVariable int id) {
+        List<Item> items = itemService.getItemsByUser(id);
+        if (items == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
-    @DeleteMapping("/item/{id}")
-    public ResponseEntity<String> deleleById(@PathVariable int id)
-    {
-        Item item = itemService.getItemByID(id);
-        String imageUrl = item.getImageUrl();
+    @GetMapping("/items-by-location-id/{id}")
+    public ResponseEntity<List<Item>> getItemsByLocation(@PathVariable int id) {
+        List<Item> itemList = itemService.getItemsByLocation(id);
 
-//        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/")+1);
-        firebaseStorageService.deleteImage(imageUrl);
-        return new ResponseEntity<>(itemService.deleteById(id),HttpStatus.OK);
+        if (itemList == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(itemList, HttpStatus.OK);
     }
 
-    @PatchMapping("/Item")
-    public ResponseEntity<String> updateByItemId(
-                                             @RequestParam("Id") int id,
-                                             @RequestParam(value = "brand", required = false) String brand,
-                                             @RequestParam(value = "model",required = false) String model,
-                                             @RequestParam(value = "description",required = false) String description,
-                                             @RequestParam(value = "price", required=false) String price,
-                                             @RequestParam(value = "locationId", required = false) String locationId,
-                                             @RequestParam(value = "file",required = false) MultipartFile file)
 
-    {
-        //retrieve exist item
-        Item item = itemService.getItemByID(id);
+    @PostMapping("/add-item")
+    public ResponseEntity<String> addItem(@RequestParam("brand") String brand,
+                                          @RequestParam("model") String model,
+                                          @RequestParam("description") String description,
+                                          @RequestParam("price") double price,
+                                          @RequestParam("locationId") int locationId,
+                                          @RequestParam("userId") int userId,
+                                          @RequestParam("file") MultipartFile file) {
 
-        if(brand!=null)
-        {
+        try {
+
+            String filename = firebaseStorageService.uploadImage(file);
+
+            Item item = new Item();
             item.setBrand(brand);
-        }
-        if(model!=null)
-        {
             item.setModel(model);
-        }
-
-        if(description!=null)
-        {
             item.setDescription(description);
+            item.setPrice(price);
+            item.setImageUrl(filename);
+            item.setUser(new User(userId));
+            item.setLocation(new Location(locationId));
+
+            itemService.addItem(item);
+            return new ResponseEntity<>("Item Added", HttpStatus.CREATED);
+
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
-        if(price != null)
-        {
-            double doublePrice = Double.parseDouble(price);
-            item.setPrice(doublePrice);
-        }
-
-
-        //location Id exist everytime -> frontend
-        if(locationId!=null)
-        {
-            int intLocationId = Integer.parseInt(locationId);
-            item.setLocation(new Location(intLocationId));
-        }
-
-        if(file!=null)
-        {
-            String imageUrl = item.getImageUrl();
-//            String fileName = oldImageUrl.substring(oldImageUrl.lastIndexOf("/")+1);
-            firebaseStorageService.deleteImage(imageUrl);
-
-
-
-
-            String newFileName = firebaseStorageService.uploadImage(file);
-            item.setImageUrl(newFileName);
-        }
-
-        String response = itemService.updateItem(item);
-
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
 
     }
 
+    @DeleteMapping("/delete-item/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable int id) {
+        try {
+            Item item = itemService.getItemByID(id);
+            String imageUrl = item.getImageUrl();
+            firebaseStorageService.deleteImage(imageUrl);
+            return new ResponseEntity<>(itemService.deleteById(id), HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PutMapping("/update-item")
+    public ResponseEntity<String> updateByItemId(
+            @RequestParam("Id") int id,
+            @RequestParam(value = "brand", required = false) String brand,
+            @RequestParam(value = "model", required = false) String model,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "price", required = false) String price,
+            @RequestParam(value = "locationId", required = false) String locationId,
+            @RequestParam(value = "file", required = false) MultipartFile file) {
+
+        try {
+            //retrieve exist item
+            Item item = itemService.getItemByID(id);
+
+            if (brand != null) {
+                item.setBrand(brand);
+            }
+            if (model != null) {
+                item.setModel(model);
+            }
+
+            if (description != null) {
+                item.setDescription(description);
+            }
+
+            if (price != null) {
+                double doublePrice = Double.parseDouble(price);
+                item.setPrice(doublePrice);
+            }
 
 
+            //location Id exist everytime -> frontend
+            if (locationId != null) {
+                int intLocationId = Integer.parseInt(locationId);
+                item.setLocation(new Location(intLocationId));
+            }
+
+            if (file != null) {
+                String imageUrl = item.getImageUrl();
 
 
+                try {
+                    firebaseStorageService.deleteImage(imageUrl);
+                } catch (Exception e) {
+// do nothing
+                }
+
+                String newFileName = firebaseStorageService.uploadImage(file);
+                item.setImageUrl(newFileName);
+            }
+
+            String response = itemService.updateItem(item);
 
 
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
 
 
 }

@@ -1,8 +1,9 @@
 package com.example.demo.rest;
 
 
+import com.example.demo.dto.UserDTO;
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.User;
-import com.example.demo.service.JwtService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,58 +13,72 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
 
-    private UserService user ;
-    private JwtService jwtService;
+    private UserService user;
 
 
     @Autowired
-    public UserController(UserService user, JwtService jwtService) {
+    public UserController(UserService user) {
         this.user = user;
-        this.jwtService = jwtService;
     }
 
 
+    // not need token
+    @PostMapping("/add-user")
+    public ResponseEntity<String> addUser(@RequestBody User user1) {
+        try {
+            return new ResponseEntity<>(user.addUser(user1), HttpStatus.CREATED);
+        } catch (Exception e) {
 
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
 
-    @PostMapping("/user")
-    public ResponseEntity<String> addUser(@RequestBody User user1)
-    {
-        return new ResponseEntity<>(user.addUser(user1), HttpStatus.CREATED);
+        }
 
     }
 
 
     @GetMapping("/user/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email )
-    {
-        return new ResponseEntity<>(user.findByEmail(email),HttpStatus.OK);
+    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
+
+        UserDTO userDTO = user.findByEmail(email);
+        if (userDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{Id}")
+    public ResponseEntity<UserDTO> getUserByID(@PathVariable int Id) {
+        UserDTO userDTO = user.getUserByID(Id);
+        if (userDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return new ResponseEntity<>(user.getUserByID(Id), HttpStatus.OK);
+    }
 
+    @PutMapping("/update-user")
+    public ResponseEntity<String> updateUser(@RequestBody User user1) {
 
-    @GetMapping ("/user/{Id}")
-        public ResponseEntity<User> getUserByID(@PathVariable int  Id)
-        {
-            return new ResponseEntity<>(user.getUserByID(Id),HttpStatus.OK);
+        try {
+            if (user1.getId() == 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("User Id is required!");
+            }
+            String result = user.updateUser(user1);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
         }
 
-    @PutMapping("/user")
-    public ResponseEntity<String> updateUser(@RequestBody User user1)
-    {
 
-        String password = user1.getPassword();
-        String success = user.addUser(user1);
-        String email = user1.getEmail();
-
-
-        String generateToken = jwtService.generateToken(email,password);
-
-
-
-        return new ResponseEntity<>(generateToken,HttpStatus.OK);
     }
-
-
 
 
 }

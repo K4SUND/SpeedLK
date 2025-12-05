@@ -17,6 +17,7 @@ public class Location {
 
     public Location() {
     }
+
     public Location(int id, String province, String district) {
         this.id = id;
         this.province = province;

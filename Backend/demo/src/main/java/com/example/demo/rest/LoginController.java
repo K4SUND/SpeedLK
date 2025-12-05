@@ -1,6 +1,7 @@
 package com.example.demo.rest;
 
 
+import com.example.demo.model.User;
 import com.example.demo.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,13 @@ public class LoginController {
 
      }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password)
+
+     // calls default constructor ( no args )
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user)
     {
-        return new ResponseEntity<>(jwt.generateToken(email,password),HttpStatus.ACCEPTED);
+
+        return new ResponseEntity<>(jwt.generateToken(user.getEmail(), user.getPassword()),HttpStatus.ACCEPTED);
 
 
     }
