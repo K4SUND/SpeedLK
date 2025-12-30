@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Nav3 from '../../Components/navigationbar/NavigationBarUserProfile';
-
+import config from '../../config';
 
 
 
@@ -18,8 +18,10 @@ export default function ExchangeCurrency
 
 
 
-  const appId = process.env.REACT_APP_API_URL;
-  const baseURL = process.env.REACT_APP_BASE_URL;
+  // const appId = process.env.REACT_APP_API_URL;
+  const appId = config.API_URL;
+  // const baseURL = process.env.REACT_APP_BASE_URL;
+  const baseURL = config.BASE_URL;
 
   //handleSubmit method
   const handleSubmit = async (e) => {

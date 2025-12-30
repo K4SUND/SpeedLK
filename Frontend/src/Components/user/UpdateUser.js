@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 export default function UpdateUser
     ({ user }) {
@@ -15,7 +16,10 @@ export default function UpdateUser
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
     const navigate = useNavigate();
-    const baseURL = process.env.REACT_APP_BASE_URL;
+
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = config.BASE_URL;
+
 
 
 

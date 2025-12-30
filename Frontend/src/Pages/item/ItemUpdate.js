@@ -4,6 +4,8 @@ import NavigationBarUserProfile from '../../Components/navigationbar/NavigationB
 import axios from 'axios';
 import Error from '../../Components/alerts/Error';
 import Success from '../../Components/alerts/Success';
+import config from '../../config';
+
 
 export default function ItemUpdate
     () {
@@ -42,8 +44,10 @@ export default function ItemUpdate
     const [Description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [imageUrl, setImageUrl] = useState("");
-    const baseURL = process.env.REACT_APP_BASE_URL;
 
+
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = config.BASE_URL;
 
 
     useEffect(() => {

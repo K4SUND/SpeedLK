@@ -3,7 +3,7 @@ import Items from '../Components/item/Items';
 import Badge from 'react-bootstrap/Badge';
 import axios from 'axios';
 import NavigationBarDefault from '../Components/navigationbar/NavigationBarDefault';
-
+import config from '../config';
 
 export default function Home
 
@@ -30,7 +30,8 @@ export default function Home
   const [error, setError] = useState(null);
 
 
-  const baseURL = process.env.REACT_APP_BASE_URL;
+  // const baseURL = process.env.REACT_APP_BASE_URL;
+  const baseURL = config.BASE_URL;
 
 
   const handleSubmit = async (e) => {

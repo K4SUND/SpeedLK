@@ -2,11 +2,15 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Nav from '../../Components/navigationbar/NavigationBarDefault';
+import config from '../../config';
+
 
 export default function Item() {
     const { id } = useParams();
     const [item, setItem] = useState(null);
-    const baseURL = process.env.REACT_APP_BASE_URL;
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = config.BASE_URL;
+
 
     useEffect(() => {
         // axios.get(`http://localhost:8080/item/${id}`)

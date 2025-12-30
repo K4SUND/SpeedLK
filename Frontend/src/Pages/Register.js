@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import NavigationBarUserProfile from '../Components/navigationbar/NavigationBarUserProfile';
-
+import config from '../config';
 
 
 export default function Register() {
@@ -16,7 +16,8 @@ export default function Register() {
     const [error, setError] = useState(null);
     const [reg, setReg] = useState(false);
 
-    const baseURL = process.env.REACT_APP_BASE_URL;
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = config.BASE_URL;
 
 
 

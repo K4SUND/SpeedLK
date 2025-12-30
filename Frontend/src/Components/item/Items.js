@@ -7,6 +7,7 @@ import "./Items.css";
 import Item from '../../Pages/item/Item';
 import { Link } from 'react-router-dom';
 import Paging from '../Paging';
+import config from '../../config';
 
 
 
@@ -15,7 +16,9 @@ export default function Items({ locationId }) {
     const [items, setItems] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const baseURL = process.env.REACT_APP_BASE_URL;
+
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = config.BASE_URL;
 
 
     const [currentPage, setCurrentPage] = useState(1);

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavigationBarUserProfile from '../Components/navigationbar/NavigationBarUserProfile';
 import { useAuth } from '../AuthContext';
+import config from '../config';
 
 export default function Login
     () {
@@ -11,7 +12,10 @@ export default function Login
     const [error, setError] = useState(null);
     const { login } = useAuth();
     const navigate = useNavigate();
-    const baseURL = process.env.REACT_APP_BASE_URL;
+
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = config.BASE_URL;
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

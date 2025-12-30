@@ -1,8 +1,11 @@
 
+import config from "../../config";
+
 export default function NavigationBarUserProfile
   () {
 
-  const homeURL = process.env.REACT_APP_HOME_URL;
+  // const homeURL = process.env.REACT_APP_HOME_URL;
+  const homeURL = config.HOME_URL;
 
 
   return (

@@ -5,7 +5,7 @@ import NavigationBarUserProfile from '../../Components/navigationbar/NavigationB
 import Success from '../../Components/alerts/Success';
 import Error from '../../Components/alerts/Error';
 import { use } from 'react';
-
+import config from '../../config';
 
 
 
@@ -44,7 +44,9 @@ export default function ItemUpload() {
 
     const navigate = useNavigate();
 
-    const baseURL = process.env.REACT_APP_BASE_URL;
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = config.BASE_URL;
+
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 

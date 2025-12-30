@@ -4,7 +4,7 @@ import UpdateUser from '../../Components/user/UpdateUser';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NavigationBarUserProfile from '../../Components/navigationbar/NavigationBarUserProfile';
-
+import config from '../../config';
 
 export default function UserProfile
   ({ tab }) {
@@ -12,7 +12,10 @@ export default function UserProfile
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState('profile');
   const [error, setError] = useState(null);
-  const baseURL = process.env.REACT_APP_BASE_URL;
+
+
+  // const baseURL = process.env.REACT_APP_BASE_URL;
+  const baseURL = config.BASE_URL;
 
   const navigate = useNavigate();
   const { state } = useLocation();

@@ -8,6 +8,8 @@ import { useParams } from 'react-router-dom';
 import ItemUpdate from '../../Pages/item/ItemUpdate';
 import Success from '../alerts/Success';
 import Error from '../alerts/Error';
+import config from '../../config';
+
 
 export default function ItemsByUser
     ({ user }) {
@@ -17,7 +19,9 @@ export default function ItemsByUser
     const [error, setError] = useState(null);
     const [update, setUpdate] = useState(false);
     const navigate = useNavigate();
-    const baseURL = process.env.REACT_APP_BASE_URL;
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = config.BASE_URL;
+
 
 
     const [successMsg, setSuccessMsg] = useState("");
