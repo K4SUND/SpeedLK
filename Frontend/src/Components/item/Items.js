@@ -112,10 +112,10 @@ export default function Items({ locationId }) {
 
                     <div>
 
-                        <Row xs={2} md={4} className="g-4 ">
+                        <Row xs={2} md={4} className="px-4 g-4">
                             {currentItems.map(item => (
                                 <Col key={item.id}>
-                                    <div class="w-full ml-10 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                    <div class="w-full  max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                         <Link to={`/item/${item.id}`}>
                                             <img className="p-8 rounded-t-lg product-image" src={item.imageUrl} alt="product" />
                                         </Link>

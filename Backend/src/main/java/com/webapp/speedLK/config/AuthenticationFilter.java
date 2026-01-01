@@ -29,7 +29,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             "/item/*",
             "/items",
             "/location-id",
-            "/items-by-user-id/*",
+//            "/items-by-user-id/*",
             "/items-by-location-id/*"
 
     );

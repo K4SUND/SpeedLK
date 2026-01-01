@@ -41,7 +41,7 @@ public class SecurityConfig {
                                         "/item/*",
                                         "/items",
                                         "/location-id",
-                                        "/items-by-user-id/*",
+//                                        "/items-by-user-id/*",
                                         "/items-by-location-id/*"
                                 ).permitAll() // allow /login
                                 .anyRequest().authenticated()          // all other endpoints require auth
